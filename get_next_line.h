@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:28:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/13 21:36:00 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/14 00:13:35 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,15 @@
 
 #   define NEWLINE '\n'
 
+#   define SUCCESS 1
+#   define ERROR -1
+#   define END_OF_FILE 0
+
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
 #include <stdlib.h>
+
 
 int		get_next_line(int fd, char **line);
 size_t	ft_strlen(const char *str);

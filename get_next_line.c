@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/13 22:04:11 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/14 00:52:05 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,6 @@ static int locate(char *haystack, char needle)
 	}
 	return (-1);
 }
-
-//static char *resize(char **dst, size_t start)
-//{
-//	char *old_ptr;
-//
-//	if (*dst == NULL)
-//		return (NULL);
-//}
 
 static char	*append(char **dst, const char *src)
 {
@@ -60,7 +52,11 @@ static char *resize(char **dst, size_t start)
 	if (*dst)
 	{
 		old_ptr = *dst;
-		*dst = ft_strndup(&old_ptr[start], ft_strlen(&old_ptr[start]));
+		
+		while ((*dst)[start] == NEWLINE && (*dst)[start] != '\0')
+			start++;
+
+		*dst = ft_strndup(&(*dst)[start], ft_strlen(&(*dst)[start]));
 		if (*dst == NULL)
 			return (NULL);
 		free(old_ptr);
@@ -74,31 +70,58 @@ int		get_next_line(int fd, char **line)
 	char		buffer[BUFFER_SIZE + 1];
 	int			bytes;
 	int			newline_pos;
-	(void)line;
 
+	if (fd == ERROR || line == NULL)
+		return (ERROR);
 	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
 	{
 		buffer[bytes] = '\0';
-		append(&dynamic, buffer);
-		if ((newline_pos = locate(dynamic, NEWLINE)))
+		if (append(&dynamic, buffer) == NULL)
+			return (ERROR);
+		if ((newline_pos = locate(dynamic, NEWLINE)) != -1)
 		{
 			*line = ft_strndup(dynamic, newline_pos);
-			resize(&dynamic, newline_pos);
-			return (1);
+			if (resize(&dynamic, newline_pos) == NULL || *line == NULL)
+				return (ERROR);
+			return (SUCCESS);
 		}
 	}
-	return (0);
+	if (append(&dynamic, buffer) == NULL)
+		return (ERROR);
+	if ((newline_pos = locate(dynamic, NEWLINE)) != -1)
+	{
+		*line = ft_strndup(dynamic, newline_pos);
+		if (resize(&dynamic, newline_pos) == NULL || *line == NULL)
+			return (ERROR);
+		return (SUCCESS);
+	}
+	return (END_OF_FILE);
 }
 
 int		main(int argc, char **argv)
 {
 	if (argc > 1)
 	{
-		int 	fd = open(argv[1], O_RDONLY);
 		char	*line;
+		int 	fd = open(argv[1], O_RDONLY);
+		int		n;
 
-		if (fd != -1)
-			get_next_line(fd, &line);
+		n = 5;
+		line = NULL;
+	/*	while (get_next_line(fd, &line) && n-- > 0)
+		{
+			printf("LINE : %s\n", line);
+			free(line);
+			line = NULL;
+		}
+		free(line);
+		line = NULL;*/
+		get_next_line(fd, NULL);
 	}
 	return (0);
 }
+
+// void	__attribute__((destructor))loop(void)
+// {
+// 	while (1);
+// }
