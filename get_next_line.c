@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/13 04:55:42 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/13 22:04:11 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,20 @@ static int locate(char *haystack, char needle)
 	return (-1);
 }
 
-static char *resize(char **dst, size_t start)
-{
-	char *old_ptr;
-
-	if (*dst == NULL)
-		return (NULL);
-}
+//static char *resize(char **dst, size_t start)
+//{
+//	char *old_ptr;
+//
+//	if (*dst == NULL)
+//		return (NULL);
+//}
 
 static char	*append(char **dst, const char *src)
 {
 	char *old_ptr;
 
 	if (*dst == NULL)
-		*dst = ft_strdup(src);
+		*dst = ft_strndup(src, ft_strlen(src));
 	else
 	{
 		old_ptr = *dst;
@@ -51,7 +51,22 @@ static char	*append(char **dst, const char *src)
 		free(old_ptr);
 	}
 	return (*dst);
-}	
+}
+
+static char *resize(char **dst, size_t start)
+{
+	char *old_ptr;
+
+	if (*dst)
+	{
+		old_ptr = *dst;
+		*dst = ft_strndup(&old_ptr[start], ft_strlen(&old_ptr[start]));
+		if (*dst == NULL)
+			return (NULL);
+		free(old_ptr);
+	}
+	return (*dst);
+}
 
 int		get_next_line(int fd, char **line)
 {
@@ -65,8 +80,12 @@ int		get_next_line(int fd, char **line)
 	{
 		buffer[bytes] = '\0';
 		append(&dynamic, buffer);
-		if ((newline_pos = locate(dynamic, NEWLINE)) != -1)
-			printf("Newline at char : [%i]\n", newline_pos);
+		if ((newline_pos = locate(dynamic, NEWLINE)))
+		{
+			*line = ft_strndup(dynamic, newline_pos);
+			resize(&dynamic, newline_pos);
+			return (1);
+		}
 	}
 	return (0);
 }
@@ -75,9 +94,11 @@ int		main(int argc, char **argv)
 {
 	if (argc > 1)
 	{
-		int fd = open(argv[1], O_RDONLY);
+		int 	fd = open(argv[1], O_RDONLY);
+		char	*line;
+
 		if (fd != -1)
-			get_next_line(fd, NULL);
+			get_next_line(fd, &line);
 	}
 	return (0);
 }

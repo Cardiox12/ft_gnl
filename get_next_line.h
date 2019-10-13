@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:28:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/13 04:45:23 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/13 21:36:00 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,8 @@
 #include <stdlib.h>
 
 int		get_next_line(int fd, char **line);
-char	*ft_strdup(const char *s1);
-void	ft_bzero(void *s, size_t n);
 size_t	ft_strlen(const char *str);
-char	*ft_strnew(size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
-
+char	*ft_strndup(const char *s, size_t len);
 
 #	endif
