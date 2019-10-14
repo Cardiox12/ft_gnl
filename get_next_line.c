@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/14 00:52:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/14 01:10:32 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,9 @@ static char *resize(char **dst, size_t start)
 
 	if (*dst)
 	{
-		old_ptr = *dst;
-		
+		old_ptr = *dst;		
 		while ((*dst)[start] == NEWLINE && (*dst)[start] != '\0')
 			start++;
-
 		*dst = ft_strndup(&(*dst)[start], ft_strlen(&(*dst)[start]));
 		if (*dst == NULL)
 			return (NULL);
@@ -104,19 +102,16 @@ int		main(int argc, char **argv)
 	{
 		char	*line;
 		int 	fd = open(argv[1], O_RDONLY);
-		int		n;
 
-		n = 5;
 		line = NULL;
-	/*	while (get_next_line(fd, &line) && n-- > 0)
+		while (get_next_line(fd, &line))
 		{
 			printf("LINE : %s\n", line);
 			free(line);
 			line = NULL;
 		}
 		free(line);
-		line = NULL;*/
-		get_next_line(fd, NULL);
+		line = NULL;
 	}
 	return (0);
 }
