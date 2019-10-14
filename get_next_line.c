@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/14 01:10:32 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/14 04:03:20 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,37 +62,43 @@ static char *resize(char **dst, size_t start)
 	return (*dst);
 }
 
+static int	get_line(char **dynamic, char *buffer, char **line)
+{
+	int	newline_pos;
+
+	if (append(dynamic, buffer) == NULL)
+		return (ERROR);
+	if ((newline_pos = locate(*dynamic, NEWLINE)) != NOT_FOUND)
+	{
+		*line = ft_strndup(*dynamic, newline_pos);
+		if (resize(dynamic, newline_pos) == NULL || *line == NULL)
+			return (ERROR);
+		return (SUCCESS);
+	}
+	return (CONTINUE);
+}
+
 int		get_next_line(int fd, char **line)
 {
 	static char	*dynamic;
 	char		buffer[BUFFER_SIZE + 1];
 	int			bytes;
-	int			newline_pos;
+	int			key_code;
 
 	if (fd == ERROR || line == NULL)
 		return (ERROR);
 	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
 	{
 		buffer[bytes] = '\0';
-		if (append(&dynamic, buffer) == NULL)
+		if ((key_code = get_line(&dynamic, buffer, line)) == ERROR)
 			return (ERROR);
-		if ((newline_pos = locate(dynamic, NEWLINE)) != -1)
-		{
-			*line = ft_strndup(dynamic, newline_pos);
-			if (resize(&dynamic, newline_pos) == NULL || *line == NULL)
-				return (ERROR);
+		else if (key_code == SUCCESS)
 			return (SUCCESS);
-		}
 	}
-	if (append(&dynamic, buffer) == NULL)
+	if ((key_code = get_line(&dynamic, buffer, line)) == ERROR)
 		return (ERROR);
-	if ((newline_pos = locate(dynamic, NEWLINE)) != -1)
-	{
-		*line = ft_strndup(dynamic, newline_pos);
-		if (resize(&dynamic, newline_pos) == NULL || *line == NULL)
-			return (ERROR);
+	else if (key_code == SUCCESS)
 		return (SUCCESS);
-	}
 	return (END_OF_FILE);
 }
 
