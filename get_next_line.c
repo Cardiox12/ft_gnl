@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/14 04:03:20 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/21 20:56:40 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ static char *resize(char **dst, size_t start)
 	return (*dst);
 }
 
+/*
+** GET_LINE
+** The get line function append a file chunk to the buffer previously passed in parameter, 
+** store it in line and resize dynamic if NEWLINE has been found in the chunk. 
+**
+** :param dynamic: the dynamic buffer previously allocated
+** 
+** get_line :
+*/
+
 static int	get_line(char **dynamic, char *buffer, char **line)
 {
 	int	newline_pos;
@@ -95,10 +105,8 @@ int		get_next_line(int fd, char **line)
 		else if (key_code == SUCCESS)
 			return (SUCCESS);
 	}
-	if ((key_code = get_line(&dynamic, buffer, line)) == ERROR)
-		return (ERROR);
-	else if (key_code == SUCCESS)
-		return (SUCCESS);
+	if ((key_code = get_line(&dynamic, buffer, line)) != CONTINUE)
+		return (key_code);
 	return (END_OF_FILE);
 }
 
