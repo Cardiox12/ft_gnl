@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/21 20:56:40 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/10/23 08:08:22 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ static int	get_line(char **dynamic, char *buffer, char **line)
 	return (CONTINUE);
 }
 
+// FIXME infinite loop on big buffer size
+
 int		get_next_line(int fd, char **line)
 {
 	static char	*dynamic;
@@ -105,8 +107,10 @@ int		get_next_line(int fd, char **line)
 		else if (key_code == SUCCESS)
 			return (SUCCESS);
 	}
-	if ((key_code = get_line(&dynamic, buffer, line)) != CONTINUE)
-		return (key_code);
+	if ((key_code = get_line(&dynamic, buffer, line)) == CONTINUE || key_code == SUCCESS)
+		return (SUCCESS);
+	else if (key_code == ERROR)
+		return (ERROR);
 	return (END_OF_FILE);
 }
 
@@ -115,12 +119,16 @@ int		main(int argc, char **argv)
 	if (argc > 1)
 	{
 		char	*line;
+		int		code;
 		int 	fd = open(argv[1], O_RDONLY);
 
 		line = NULL;
-		while (get_next_line(fd, &line))
+		while ((code = get_next_line(fd, &line)) == SUCCESS)
 		{
 			printf("LINE : %s\n", line);
+			//printf("RETURN : %i\n", code);
+			//getchar();
+			//system("clear");
 			free(line);
 			line = NULL;
 		}
