@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/11/01 15:16:43 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/11/01 18:25:21 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,7 @@ int		get_next_line(int fd, char **line)
 		return (ERROR);
 	key_code = get_line(&dynamic, buffer, line);
 	while (key_code == CONTINUE)
-	{
 		key_code = get_line(&dynamic, buffer, line);
-		printf("DYNAMIC : %s\n", dynamic);
-		getchar();
-	}
 	if (key_code == SUCCESS || key_code == ERROR)
 		return (ERROR);
 	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
@@ -138,13 +134,13 @@ int		main(int argc, char **argv)
 	if (argc > 1)
 	{
 		char	*line;
+		int		code;
 		int 	fd = open(argv[1], O_RDONLY);
 
 		line = NULL;
-		while (get_next_line(fd, &line))
+		while ((code = get_next_line(fd, &line)) == SUCCESS)
 		{
 			printf("LINE : %s\n", line);
-			//getchar();
 			free(line);
 			line = NULL;
 		}
