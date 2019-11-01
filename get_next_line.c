@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/10/14 04:03:20 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/11/01 15:16:43 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ static char *resize(char **dst, size_t start)
 
 	if (*dst)
 	{
-		old_ptr = *dst;		
-		while ((*dst)[start] == NEWLINE && (*dst)[start] != '\0')
+		old_ptr = *dst;
+		if ((*dst)[start] != '\0' && (*dst)[start] == NEWLINE)
 			start++;
 		*dst = ft_strndup(&(*dst)[start], ft_strlen(&(*dst)[start]));
 		if (*dst == NULL)
@@ -62,12 +62,38 @@ static char *resize(char **dst, size_t start)
 	return (*dst);
 }
 
+static void	resize_static(char **dst, size_t start)
+{
+	size_t	dst_len = ft_strlen(&(*dst)[start]);
+	size_t	index;
+	char	tmp_buffer[dst_len];
+
+	if (*dst)
+	{
+		index = 0;
+		while (index < dst_len)
+		{
+			tmp_buffer[index] = (*dst)[start + index];
+			index++;
+		}
+		index = 0;
+		while (index < dst_len)
+		{
+			(*dst)[index] = tmp_buffer[index];
+			index++;
+		}
+		(*dst)[index] = '\0';
+	}
+}
+
 static int	get_line(char **dynamic, char *buffer, char **line)
 {
 	int	newline_pos;
 
 	if (append(dynamic, buffer) == NULL)
 		return (ERROR);
+	if ((newline_pos = locate(buffer, NEWLINE)) != NOT_FOUND)
+		resize_static(&buffer, newline_pos);
 	if ((newline_pos = locate(*dynamic, NEWLINE)) != NOT_FOUND)
 	{
 		*line = ft_strndup(*dynamic, newline_pos);
@@ -87,6 +113,15 @@ int		get_next_line(int fd, char **line)
 
 	if (fd == ERROR || line == NULL)
 		return (ERROR);
+	key_code = get_line(&dynamic, buffer, line);
+	while (key_code == CONTINUE)
+	{
+		key_code = get_line(&dynamic, buffer, line);
+		printf("DYNAMIC : %s\n", dynamic);
+		getchar();
+	}
+	if (key_code == SUCCESS || key_code == ERROR)
+		return (ERROR);
 	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
 	{
 		buffer[bytes] = '\0';
@@ -95,10 +130,6 @@ int		get_next_line(int fd, char **line)
 		else if (key_code == SUCCESS)
 			return (SUCCESS);
 	}
-	if ((key_code = get_line(&dynamic, buffer, line)) == ERROR)
-		return (ERROR);
-	else if (key_code == SUCCESS)
-		return (SUCCESS);
 	return (END_OF_FILE);
 }
 
@@ -113,6 +144,7 @@ int		main(int argc, char **argv)
 		while (get_next_line(fd, &line))
 		{
 			printf("LINE : %s\n", line);
+			//getchar();
 			free(line);
 			line = NULL;
 		}
