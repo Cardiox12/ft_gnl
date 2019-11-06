@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/11/01 18:25:21 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/11/06 13:15:50 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,27 +62,15 @@ static char *resize(char **dst, size_t start)
 	return (*dst);
 }
 
-static void	resize_static(char **dst, size_t start)
+static void	resize_static(char *buffer)
 {
-	size_t	dst_len = ft_strlen(&(*dst)[start]);
-	size_t	index;
-	char	tmp_buffer[dst_len];
+	size_t index;
 
-	if (*dst)
+	index = 0;
+	while (index < BUFFER_SIZE)
 	{
-		index = 0;
-		while (index < dst_len)
-		{
-			tmp_buffer[index] = (*dst)[start + index];
-			index++;
-		}
-		index = 0;
-		while (index < dst_len)
-		{
-			(*dst)[index] = tmp_buffer[index];
-			index++;
-		}
-		(*dst)[index] = '\0';
+		buffer[index] = '\0';
+		index++;
 	}
 }
 
@@ -93,7 +81,7 @@ static int	get_line(char **dynamic, char *buffer, char **line)
 	if (append(dynamic, buffer) == NULL)
 		return (ERROR);
 	if ((newline_pos = locate(buffer, NEWLINE)) != NOT_FOUND)
-		resize_static(&buffer, newline_pos);
+		resize_static(buffer);
 	if ((newline_pos = locate(*dynamic, NEWLINE)) != NOT_FOUND)
 	{
 		*line = ft_strndup(*dynamic, newline_pos);
@@ -101,7 +89,7 @@ static int	get_line(char **dynamic, char *buffer, char **line)
 			return (ERROR);
 		return (SUCCESS);
 	}
-	return (CONTINUE);
+	return (END_OF_FILE);
 }
 
 int		get_next_line(int fd, char **line)
@@ -113,19 +101,15 @@ int		get_next_line(int fd, char **line)
 
 	if (fd == ERROR || line == NULL)
 		return (ERROR);
-	key_code = get_line(&dynamic, buffer, line);
-	while (key_code == CONTINUE)
-		key_code = get_line(&dynamic, buffer, line);
-	if (key_code == SUCCESS || key_code == ERROR)
-		return (ERROR);
 	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
 	{
 		buffer[bytes] = '\0';
-		if ((key_code = get_line(&dynamic, buffer, line)) == ERROR)
-			return (ERROR);
-		else if (key_code == SUCCESS)
-			return (SUCCESS);
+		if ((key_code = get_line(&dynamic, buffer, line)) == ERROR || key_code == SUCCESS)
+			return (key_code);
 	}
+	key_code = get_line(&dynamic, buffer, line);
+	if (key_code == SUCCESS || key_code == ERROR)
+		return (key_code);
 	return (END_OF_FILE);
 }
 
@@ -154,3 +138,4 @@ int		main(int argc, char **argv)
 // {
 // 	while (1);
 // }
+
