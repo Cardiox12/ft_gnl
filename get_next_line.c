@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/11/06 13:15:50 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/11/06 13:27:46 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,17 @@ int		main(int argc, char **argv)
 {
 	if (argc > 1)
 	{
+		size_t	nb_line;
 		char	*line;
 		int		code;
 		int 	fd = open(argv[1], O_RDONLY);
 
 		line = NULL;
+		nb_line = 1;
 		while ((code = get_next_line(fd, &line)) == SUCCESS)
 		{
-			printf("LINE : %s\n", line);
+			printf("%zu : %s\n", nb_line, line);
+			nb_line++;
 			free(line);
 			line = NULL;
 		}
