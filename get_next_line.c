@@ -6,27 +6,13 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/11/06 14:02:46 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/11/08 17:11:03 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
-
-static int locate(char *haystack, char needle)
-{
-	int index;
-
-	index = 0;
-	while (haystack[index])
-	{
-		if (haystack[index] == needle)
-			return (index);
-		index++;
-	}
-	return (-1);
-}
 
 static char	*append(char **dst, const char *src)
 {
@@ -62,26 +48,22 @@ static char *resize(char **dst, size_t start)
 	return (*dst);
 }
 
-static void	resize_static(char *buffer)
-{
-	size_t index;
-
-	index = 0;
-	while (index < BUFFER_SIZE)
-	{
-		buffer[index] = '\0';
-		index++;
-	}
-}
-
 static int	get_line(char **dynamic, char *buffer, char **line)
 {
-	int	newline_pos;
+	int		newline_pos;
+	size_t	index;
 
 	if (append(dynamic, buffer) == NULL)
 		return (ERROR);
 	if ((newline_pos = locate(buffer, NEWLINE)) != NOT_FOUND)
-		resize_static(buffer);
+	{
+		index = 0;
+		while (index < BUFFER_SIZE)
+		{
+			buffer[index] = '\0';
+			index++;
+		}
+	}
 	if ((newline_pos = locate(*dynamic, NEWLINE)) != NOT_FOUND)
 	{
 		*line = ft_strndup(*dynamic, newline_pos);
@@ -99,7 +81,7 @@ int		get_next_line(int fd, char **line)
 	int			bytes;
 	int			key_code;
 
-	if (fd == ERROR || line == NULL)
+	if ((read(fd, buffer, 0)) == ERROR || fd == ERROR || line == NULL)
 		return (ERROR);
 	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
 	{
@@ -135,7 +117,30 @@ int		get_next_line(int fd, char **line)
 // 		line = NULL;
 // 	}
 // 	return (0);
-//}
+// }
+int		main(int argc, char **argv)
+{
+	if (argc)
+	{
+		size_t	nb_line;
+		char	*line;
+		int		code;
+		int 	fd = (argc == 1) ? 0 : open(argv[1], O_RDONLY);
+
+		line = NULL;
+		nb_line = 1;
+		while ((code = get_next_line(fd, &line)) == SUCCESS)
+		{
+			printf("%zu : %s\n", nb_line, line);
+			nb_line++;
+			free(line);
+			line = NULL;
+		}
+		free(line);
+		line = NULL;
+	}
+	return (0);
+}
 
 // void	__attribute__((destructor))loop(void)
 // {

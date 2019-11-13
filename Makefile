@@ -6,12 +6,12 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/06 13:20:27 by bbellavi          #+#    #+#              #
-#    Updated: 2019/11/06 13:47:21 by bbellavi         ###   ########.fr        #
+#    Updated: 2019/11/08 17:12:13 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		= gcc
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	= -Wall -Werror -Wextra -g 
 NAME	= get_next_line
 DEP		= get_next_line.c get_next_line_utils.c
 INCLUDE = .
@@ -20,7 +20,7 @@ INCLUDE = .
 all: $(NAME)
 
 $(NAME): $(DEP)
-	$(CC) $(CFLAGS) -o $(NAME) $? -I$(INCLUDE) -D BUFFER_SIZE=1000000
+	$(CC) $(CFLAGS) -o $(NAME) $? -I$(INCLUDE) -D BUFFER_SIZE=1
 
 clean:
 	rm -rf $(NAME) $(NAME).dSYM

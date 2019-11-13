@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 04:20:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/11/01 14:14:08 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/11/08 15:51:56 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,18 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		*concat++ = *s2++;
 	*concat = '\0';
 	return (begin);
+}
+
+int		locate(char *haystack, char needle)
+{
+	int index;
+
+	index = 0;
+	while (haystack[index])
+	{
+		if (haystack[index] == needle)
+			return (index);
+		index++;
+	}
+	return (-1);
 }
