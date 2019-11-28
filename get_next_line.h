@@ -6,7 +6,11 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:28:32 by bbellavi          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2019/11/27 17:02:39 by bbellavi         ###   ########.fr       */
+=======
+/*   Updated: 2019/11/27 16:53:55 by bbellavi         ###   ########.fr       */
+>>>>>>> finished
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +30,18 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+<<<<<<< HEAD
 int		get_next_line(int fd, char **line);
 size_t	ft_strlen(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strndup(const char *s, size_t len);
 char	*ft_strncpy(char *dst, const char *src, size_t len);
+=======
+int         get_next_line(int fd, char **line);
+size_t      ft_strlen(const char *str);
+char        *ft_strjoin(char const *s1, char const *s2);
+char        *ft_strndup(const char *s, size_t len);
+char        *ft_strncpy(char *dst, const char *src, size_t len);
+>>>>>>> finished
 
 #	endif
