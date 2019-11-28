@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 04:20:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2019/11/08 15:51:56 by bbellavi         ###   ########.fr       */
+/*   Updated: 2019/11/27 17:05:50 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	const size_t	s1_len = ft_strlen(s1);
 	const size_t	s2_len = ft_strlen(s2);
-	char 			*begin;
 	char			*concat;
+	char			*begin;
 
 	concat = malloc(sizeof(char) * (s1_len + s2_len + 1));
 	if (concat == NULL)
@@ -53,18 +53,4 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		*concat++ = *s2++;
 	*concat = '\0';
 	return (begin);
-}
-
-int		locate(char *haystack, char needle)
-{
-	int index;
-
-	index = 0;
-	while (haystack[index])
-	{
-		if (haystack[index] == needle)
-			return (index);
-		index++;
-	}
-	return (-1);
 }
