@@ -6,19 +6,11 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 04:20:52 by bbellavi          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2019/11/27 17:17:52 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-=======
-/*   Updated: 2019/11/17 18:01:14 by bbellavi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "get_next_line.h"
->>>>>>> finished
 
 size_t	ft_strlen(const char *str)
 {
@@ -49,11 +41,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	const size_t	s1_len = ft_strlen(s1);
 	const size_t	s2_len = ft_strlen(s2);
 	char			*concat;
-<<<<<<< HEAD
 	char			*begin;
-=======
-	char 			*begin;
->>>>>>> finished
 
 	concat = malloc(sizeof(char) * (s1_len + s2_len + 1));
 	if (concat == NULL)
@@ -86,18 +74,9 @@ t_buf	*manage_buffer(t_buf **origin, int fd)
 	t_buf	*buf;
 	t_buf	*tmp;
 
-<<<<<<< HEAD
 	buf = NULL;
 	if (*origin == NULL)
 		*origin = init_buffer(fd);
-=======
-	if (*origin == NULL)
-	{
-		if ((buf = init_buffer(fd)) == NULL)
-			return (NULL);
-		*origin = buf;
-	}
->>>>>>> finished
 	else
 	{
 		tmp = *origin;
@@ -116,8 +95,4 @@ t_buf	*manage_buffer(t_buf **origin, int fd)
 		}
 	}
 	return (buf);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> finished

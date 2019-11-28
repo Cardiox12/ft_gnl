@@ -6,11 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2019/11/27 17:04:46 by bbellavi         ###   ########.fr       */
-=======
-/*   Updated: 2019/11/27 16:51:25 by bbellavi         ###   ########.fr       */
->>>>>>> finished
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,17 +86,12 @@ int			get_next_line(int fd, char **line)
 	static char		*dynamic = NULL;
 	int				bytes;
 	int				key_code;
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> finished
 	if ((read(fd, buffer, 0)) == ERROR || fd == ERROR || line == NULL)
 		return (ERROR);
 	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
 	{
 		buffer[bytes] = '\0';
-<<<<<<< HEAD
 		if ((key_code = get_line(buffer, &dynamic, line)) == ERROR
 				|| key_code == SUCCESS)
 			return (key_code);
@@ -108,13 +99,6 @@ int			get_next_line(int fd, char **line)
 	buffer[bytes] = '\0';
 	if ((key_code = get_line(buffer, &dynamic, line)) == SUCCESS
 			|| key_code == ERROR)
-=======
-		if ((key_code = get_line(buffer, &dynamic, line)) == ERROR || key_code == SUCCESS)
-			return (key_code);
-	}
-	buffer[bytes] = '\0';
-	if ((key_code = get_line(buffer, &dynamic, line)) == SUCCESS || key_code == ERROR)
->>>>>>> finished
 		return (key_code);
 	if ((*line = ft_strndup(dynamic, ft_strlen(dynamic))) == NULL)
 		return (ERROR);

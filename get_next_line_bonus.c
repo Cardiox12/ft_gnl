@@ -6,11 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 03:24:10 by bbellavi          #+#    #+#             */
-<<<<<<< HEAD:get_next_line_bonus.c
 /*   Updated: 2019/11/27 17:21:25 by bbellavi         ###   ########.fr       */
-=======
-/*   Updated: 2019/11/27 16:51:25 by bbellavi         ###   ########.fr       */
->>>>>>> finished:gnlkiller/get_next_line.c
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +62,18 @@ static char	*resize(char **dst, size_t start)
 	return (*dst);
 }
 
-static int	get_line(char *buffer, char **dynamic, char **line)
+static int	get_line(t_buf *buf, char **line)
 {
 	int		newline_pos;
 
-	if (append(dynamic, buffer) == NULL)
+	if (append(&buf->dynamic, buf->buffer) == NULL)
 		return (ERROR);
-	if ((newline_pos = locate(buffer, NEWLINE)) != NOT_FOUND)
-		buffer[0] = '\0';
-	if ((newline_pos = locate(*dynamic, NEWLINE)) != NOT_FOUND)
+	if ((newline_pos = locate(buf->buffer, NEWLINE)) != NOT_FOUND)
+		buf->buffer[0] = '\0';
+	if ((newline_pos = locate(buf->dynamic, NEWLINE)) != NOT_FOUND)
 	{
-		*line = ft_strndup(*dynamic, newline_pos);
-		if (resize(dynamic, newline_pos) == NULL || *line == NULL)
+		*line = ft_strndup(buf->dynamic, newline_pos);
+		if (resize(&buf->dynamic, newline_pos) == NULL || *line == NULL)
 			return (ERROR);
 		return (SUCCESS);
 	}
@@ -86,31 +82,26 @@ static int	get_line(char *buffer, char **dynamic, char **line)
 
 int			get_next_line(int fd, char **line)
 {
-	char			buffer[BUFFER_SIZE + 1];
-	static char		*dynamic = NULL;
+	static t_buf	*first = NULL;
+	t_buf			*buf;
 	int				bytes;
 	int				key_code;
-<<<<<<< HEAD:get_next_line_bonus.c
 
 	if ((buf = manage_buffer(&first, fd)) == NULL)
 		return (ERROR);
 	if ((read(fd, buf->buffer, 0)) == ERROR || fd == ERROR || line == NULL)
-=======
-	
-	if ((read(fd, buffer, 0)) == ERROR || fd == ERROR || line == NULL)
->>>>>>> finished:gnlkiller/get_next_line.c
 		return (ERROR);
-	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
+	while ((bytes = read(buf->fd, buf->buffer, BUFFER_SIZE)))
 	{
-		buffer[bytes] = '\0';
-		if ((key_code = get_line(buffer, &dynamic, line)) == ERROR || key_code == SUCCESS)
+		buf->buffer[bytes] = '\0';
+		if ((key_code = get_line(buf, line)) == ERROR || key_code == SUCCESS)
 			return (key_code);
 	}
-	buffer[bytes] = '\0';
-	if ((key_code = get_line(buffer, &dynamic, line)) == SUCCESS || key_code == ERROR)
+	buf->buffer[bytes] = '\0';
+	if ((key_code = get_line(buf, line)) == SUCCESS || key_code == ERROR)
 		return (key_code);
-	if ((*line = ft_strndup(dynamic, ft_strlen(dynamic))) == NULL)
+	if ((*line = ft_strndup(buf->dynamic, ft_strlen(buf->dynamic))) == NULL)
 		return (ERROR);
-	resize(&dynamic, ft_strlen(dynamic));
+	resize(&buf->dynamic, ft_strlen(buf->dynamic));
 	return (END_OF_FILE);
 }
