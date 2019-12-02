@@ -85,9 +85,9 @@ int			get_next_line(int fd, char **line)
 	int				bytes;
 	int				key_code;
 
-	if ((read(fd, buffer, 0)) == ERROR || fd == ERROR || line == NULL)
+	if (BUFFER_SIZE == ERROR || fd == ERROR || line == NULL)
 		return (ERROR);
-	while ((bytes = read(fd, buffer, BUFFER_SIZE)))
+	while ((bytes = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[bytes] = '\0';
 		if ((key_code = get_line(buffer, &dynamic, line)) == ERROR
@@ -100,6 +100,7 @@ int			get_next_line(int fd, char **line)
 		return (key_code);
 	if ((*line = ft_strndup(dynamic, ft_strlen(dynamic))) == NULL)
 		return (ERROR);
-	resize(&dynamic, ft_strlen(dynamic));
+	free(dynamic);
+	dynamic = NULL;
 	return (END_OF_FILE);
 }
