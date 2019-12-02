@@ -103,5 +103,6 @@ int			get_next_line(int fd, char **line)
 	if ((*line = ft_strndup(buf->dynamic, ft_strlen(buf->dynamic))) == NULL)
 		return (ERROR);
 	resize(&buf->dynamic, ft_strlen(buf->dynamic));
+	free(first);
 	return (END_OF_FILE);
 }
